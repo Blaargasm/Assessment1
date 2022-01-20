@@ -1,8 +1,8 @@
 ---
-title: "Persado_DStest"
+title: "DStest"
 output: pdf_document
 ---
-**Q1)**
+**1)**
 ```{r echo=FALSE, message=FALSE, warning=FALSE}
 rm(list=ls())
 
@@ -19,12 +19,12 @@ ub = read.csv('test_dataset/UB.csv')
 summary(ub$Age)
 ```
 
-**Q2) ** The histogram has a bimodal shape (there are two peaks). Tenure ranges from 0-38 months. Tenures of 15-19 months are less common, and the vast majority of customers have either 10-14 months of tenure, or 20-25 months of tenure.
+**2) ** The histogram has a bimodal shape (there are two peaks). Tenure ranges from 0-38 months. Tenures of 15-19 months are less common, and the vast majority of customers have either 10-14 months of tenure, or 20-25 months of tenure.
 ```{r}
 hist(ub$Tenure, xlab = 'Tenure (Months)')
 ```
 
-**Q3) ** No, the average tenure is ~16 months with 95% confidence. Since the sample size is very large, we can apply the Central Limit Theorem. Therefore, I am assuming sample mean is ~normally distributed.
+**3) ** Average tenure is ~16 months with 95% confidence. Since the sample size is very large, we can apply the Central Limit Theorem. Therefore, I am assuming sample mean is ~normally distributed.
 ```{r}
 #calculate mean, standard deviation, standard error of mean
 t.mean = mean(ub$Tenure)
@@ -46,7 +46,7 @@ print(c(t.lower, t.upper))
 t.test(ub$Tenure)
 ```
 
-**Q4) **
+**4) **
 ```{r echo=FALSE, message=FALSE, warning=FALSE}
 cbygta = ub %>% select(Gender, Type, Age) %>% 
   group_by(Gender, Type) %>% 
@@ -54,7 +54,7 @@ cbygta = ub %>% select(Gender, Type, Age) %>%
 head(cbygta)
 ```
 
-**Q5) **
+**5) **
 ```{r}
 cbye = ub %>% select(Email_Address) %>% 
   group_by('Email Domain' = str_extract(Email_Address,'(?<=@)(\\w+)')) %>%
@@ -64,7 +64,7 @@ cbye = ub %>% select(Email_Address) %>%
 head(cbye)
 ```
 
-**Q6) **
+**6) **
 ```{r}
 sent = read.csv('test_dataset/Sent_Table.csv', stringsAsFactors = FALSE)
 head(sent)
@@ -91,7 +91,7 @@ head(sentbyday)
 ```
 
 
-**Q7) ** In this problem, I used one-way ANOVA to test for any statistical differences between the 3 groups. The resulting p-value of 0.3 is greater than 0.05. Therefore, we can't reject the null hypothesis (no difference between subjectline ID's) Thus, there are no significant differences between the SubjectLine_IDs. That being said, SubjectLine_ID 3 seems to be underperforming with an 8.54% open rate.
+**7) ** I used one-way ANOVA to test for any statistical differences between the 3 groups. The resulting p-value of 0.3 is greater than 0.05. Therefore, we can't reject the null hypothesis (no difference between subjectline ID's) Thus, there are no significant differences between the SubjectLine_IDs. That being said, SubjectLine_ID 3 seems to be underperforming with an 8.54% open rate.
 ```{r}
 resp = read.csv('test_dataset/Responded_Table.csv')
 
@@ -116,7 +116,7 @@ one.way = aov(openrbyid$AvgOpenRate ~ openrbyid$SubjectLine_ID, data = openrbyid
 summary(one.way)
 ```
 
-**Q8) **We are seeing a 10.2% average open rate for businesses, and a 9% average open rate for consumers.
+**8) **We are seeing a 10.2% average open rate for businesses, and a 9% average open rate for consumers.
 ```{r}
 sub = sent %>% left_join(ub, by=c('Customer_ID'))
 atype = sub %>% 
@@ -131,7 +131,7 @@ avgbytype = cbytype %>% left_join(sentbytype, by=c('Type')) %>% mutate(type.AvgO
 print(avgbytype)
 ```
 
-**Q9) ** For this problem, since we are predicting the open rate based on the customer attributes and subject line ID received, I use logistic since regression generates values between 0 and 1 that can be interpreted as a percentage. First, I created an indicator variable to show whether the email was opened. Then, I cleaned up the data and dropped duplicates and unnecessary columns. After, I split the data into training and test data in a ratio of 70% training data, 30% test/validation data. With the customer parameters provided, this model predicts an open rate of 8.4%.
+**9) ** For this problem, since we are predicting the open rate based on the customer attributes and subject line ID received, I use logistic since regression generates values between 0 and 1 that can be interpreted as a percentage. First, I created an indicator variable to show whether the email was opened. Then, I cleaned up the data and dropped duplicates and unnecessary columns. After, I split the data into training and test data in a ratio of 70% training data, 30% test/validation data. With the customer parameters provided, this model predicts an open rate of 8.4%.
 ```{r}
 #create indicator variable opened
 ind = rns %>% filter(Responded_Date == Sent_Date) %>% mutate(opened = 1)
@@ -178,7 +178,7 @@ plot(r, main='ROC Curve')
 r
 ```
 
-**Q10) ** For this problem, I created a logistic regression model with the response (opened) as a function of age, type, and gender. Then I created a  new dataframe using the information that I have to predict and plot the logistic regression curve. Lastly, I used ggplot to plot the relationship between open rate, age, type with separate plots for each gender.
+**10) ** For this problem, I created a logistic regression model with the response (opened) as a function of age, type, and gender. Then I created a  new dataframe using the information that I have to predict and plot the logistic regression curve. Lastly, I used ggplot to plot the relationship between open rate, age, type with separate plots for each gender.
 ```{r}
 openr = glm(opened ~ Age + Type, family=binomial, data=oprate)
 
