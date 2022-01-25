@@ -11,17 +11,17 @@ set.seed(1029)
 ub = read.csv('test_dataset/UB.csv')
 head(ub)
 
-#Q1: Provide the Average, Median, Q1, Q3, Min, Max and the Mode of Age variable
+#1: Find the Average, Median, Q1, Q3, Min, Max and the Mode of Age variable
 
 summary(ub$Age)
 
-#Q2: Provide a Histogram of the Tenure variable. What can you say about the distribution?
+#2: Provide a Histogram of the Tenure variable. What can you say about the distribution?
 
 hist(ub$Tenure, xlab = 'Tenure (Months)')
 #bimodal shape, tenure ranges from 0-38 months. Tenures of 15-19 months are less common. 
 #Vast majority of customers have either 10-14 months of tenure, or 20-25 months.
 
-#Q3: Provide a 95% Confidence Interval of the Tenure. 
+#3: Provide a 95% Confidence Interval of the Tenure. 
 #Can we claim that the average Tenure of the Userbase is 17 months
 
 #Since sample size is very large, apply Central Limit Theorem. Therefore, I am assuming sample mean is ~normally distributed.
@@ -49,7 +49,7 @@ t.test(ub$Tenure)
 
 #No, average tenure is ~16 months with 95% confidence.
 
-#Q4: Calculate the Average Age and the Proportion of Customers per Gender and Type.
+#4: Calculate the Average Age and the Proportion of Customers per Gender and Type.
 #output columns: Gender, Type, Average Age, Proportion of customers
 
 #select columns we want, group by gender and age,create new columns and calculate average age, proportion of customers
@@ -62,7 +62,7 @@ head(cbygta)
 #check with tapply()
 tapply(ub$Age, list(ub$Gender, ub$Type), mean)
 
-#Q5:Calculate  the Number of  Customers per Email  Domain. 
+#5:Calculate  the Number of  Customers per Email  Domain. 
 #Output: Email Domain, Number of Customers
 
 #select column we want, use regex to extract domain name, then calculate number of customers
@@ -74,7 +74,7 @@ cbye = ub %>% select(Email_Address) %>%
 head(cbye)
 sum((cbye$`Number of Customers`))
 
-#Q6: Calculate the Average Number of Emails Sent per Weekday
+#6: Calculate the Average Number of Emails Sent per Weekday
 #output: Weekdays, Average Number of Emails Sent
 
 #read in data, isolate Sent_Date column in new dataframe, convert dates to weekdays
@@ -104,7 +104,7 @@ sentbyday = sentbyday %>%
   select(Weekdays, 'Average Number of Emails Sent')
 head(sentbyday)
 
-#Q7: Calculate the Average Open Rate by SubjectLine_ID
+#7: Calculate the Average Open Rate by SubjectLine_ID
 #What can you say about the performance of the messages?
 # infer if these three SubjectLined IDs statistically equal
 resp = read.csv('test_dataset/Responded_Table.csv')
@@ -135,7 +135,7 @@ summary(one.way)
 #there are no significant differences between the SubjectLine_IDs.
 
 
-#Q8:Calculate the Average Open Rate by Type
+#8:Calculate the Average Open Rate by Type
 #join data 
 sub = sent %>% left_join(ub, by=c('Customer_ID'))
 atype = sub %>% 
@@ -149,7 +149,7 @@ sentbytype = sub %>% group_by(Type) %>% summarize(sent.type = n())
 avgbytype = cbytype %>% left_join(sentbytype, by=c('Type')) %>% mutate(type.AvgOpen = n/sent.type)
 #We are seeing ~10% average open rate for businesses, and ~9% average open rate for consumers.
 
-#Q9 predict open rate based on customer attributes, subjectlineID received
+#9 predict open rate based on customer attributes, subjectlineID received
 #describe/evaluate model
 #pr(opening) of cust(gender=F,type=B,email=aol,age=50,tenure=12), subjectlineID=3
 
@@ -200,7 +200,7 @@ r
 #this ROC curve and AUC calculation shows that our model is not very good at predicting the open rate.
 #since the AUC value is only ~52%, model is only slightly better than guessing.
 
-#Q10: graph Open Rate by Age, Type and Gender
+#10: graph Open Rate by Age, Type and Gender
 #create logistic regression model on parameteres specified
 openr = glm(opened ~ Age + Type, family=binomial, data=oprate)
 
