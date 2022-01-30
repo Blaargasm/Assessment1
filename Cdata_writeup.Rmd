@@ -178,7 +178,7 @@ plot(r, main='ROC Curve')
 r
 ```
 
-**10) ** For this problem, I created a logistic regression model with the response (opened) as a function of age, type, and gender. Then I created a  new dataframe using the information that I have to predict and plot the logistic regression curve. Lastly, I used ggplot to plot the relationship between open rate, age, type with separate plots for each gender.
+**10) ** I created a logistic regression model with the response (opened) as a function of age, type, and gender. Then I created a  new dataframe using the information that I have to predict and plot the logistic regression curve. Lastly, I used ggplot to plot the relationship between open rate, age, type with separate plots for each gender.
 ```{r}
 openr = glm(opened ~ Age + Type, family=binomial, data=oprate)
 
